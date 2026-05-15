@@ -81,7 +81,8 @@ export default function MobileToc({
     const handleClose = () => setIsOpen(false);
 
     return (
-        <div
+        <nav
+            aria-label="Mobile table of contents"
             className={[
                 "fixed left-0 right-0 top-0 z-40 2xl:hidden transition-[transform,opacity] duration-300",
                 hasScrolled
@@ -95,7 +96,7 @@ export default function MobileToc({
                 <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-6 py-3 sm:px-16">
                     <div className="min-w-0">
                         <div className="text-[11px] uppercase tracking-[0.25em] text-slate-400">
-                            How Browsers Work
+                            PH Alternatives
                         </div>
                         <div className="truncate text-sm font-semibold text-slate-800">
                             {activeTitle}
@@ -162,6 +163,6 @@ export default function MobileToc({
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
     );
 }

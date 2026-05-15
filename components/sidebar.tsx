@@ -21,7 +21,9 @@ export default function Sidebar({
     const { activeSectionId } = useSectionsProgress();
 
     return (
-        <aside
+        <div
+            role="navigation"
+            aria-label="Section navigation"
             className={["w-full lg:w-80 lg:shrink-0", className]
                 .filter(Boolean)
                 .join(" ")}
@@ -67,6 +69,6 @@ export default function Sidebar({
                     })}
                 </ul>
             </div>
-        </aside>
+        </div>
     );
 }
