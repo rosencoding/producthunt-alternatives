@@ -3,240 +3,18 @@ import { SectionsProgressProvider } from "@/components/sections-progress";
 import Section from "@/components/section";
 import Sidebar from "@/components/sidebar";
 import MobileToc from "@/components/mobile-toc";
+import Image from "next/image";
 import Link from "next/link";
-
-type Alternative = {
-    name: string;
-    url: string;
-    description: string;
-    pricing: "Free" | "Free/Paid" | "Freemium";
-};
-
-type SectionConfig = {
-    id: string;
-    title: string;
-};
-
-const sections: SectionConfig[] = [
-    { id: "why", title: "Why look beyond Product Hunt?" },
-    { id: "launch-platforms", title: "Launch Platforms" },
-    { id: "communities", title: "Communities" },
-    { id: "directories", title: "Directories & Review Sites" },
-    { id: "ai-directories", title: "AI-Specific Directories" },
-    { id: "other", title: "Other Platforms" },
-];
-
-const launchPlatforms: Alternative[] = [
-    {
-        name: "Hacker News (Show HN)",
-        url: "https://news.ycombinator.com",
-        description:
-            "Tech-focused community. A Show HN post that resonates can drive thousands of developer visits in hours.",
-        pricing: "Free",
-    },
-    {
-        name: "BetaList",
-        url: "https://betalist.com",
-        description:
-            "Curated startup directory focused on early-stage products. Paid options for faster listing.",
-        pricing: "Free/Paid",
-    },
-    {
-        name: "MicroLaunch",
-        url: "https://microlaunch.net",
-        description:
-            "Built specifically for indie hackers and micro-SaaS. Smaller audience, but highly relevant.",
-        pricing: "Free",
-    },
-    {
-        name: "Uneed",
-        url: "https://uneed.best",
-        description:
-            "Curated tool directory with daily rankings. Paid options get you featured faster.",
-        pricing: "Free/Paid",
-    },
-    {
-        name: "DevHunt",
-        url: "https://devhunt.org",
-        description:
-            "Launch platform exclusively for developer tools. If your audience is developers, start here.",
-        pricing: "Free",
-    },
-    {
-        name: "Peerlist",
-        url: "https://peerlist.io",
-        description:
-            "Professional network for builders with integrated launch features and peer endorsements.",
-        pricing: "Free",
-    },
-    {
-        name: "Fazier",
-        url: "https://fazier.com",
-        description:
-            "Startup launch platform with an engaged community of early adopters.",
-        pricing: "Free",
-    },
-    {
-        name: "Launching Next",
-        url: "https://launchingnext.com",
-        description:
-            "Submit your startup to get listed and discovered by early adopters browsing new products.",
-        pricing: "Free",
-    },
-    {
-        name: "SideProjectors",
-        url: "https://sideprojectors.com",
-        description:
-            "Marketplace for side projects. Launch, get feedback, or even sell your project.",
-        pricing: "Free",
-    },
-    {
-        name: "BetaPage",
-        url: "https://betapage.co",
-        description:
-            "Community of beta testers actively looking for new products to try and review.",
-        pricing: "Free",
-    },
-];
-
-const communities: Alternative[] = [
-    {
-        name: "Indie Hackers",
-        url: "https://indiehackers.com",
-        description:
-            "Founders sharing revenue numbers, growth strategies, and hard-won lessons. The audience is other builders who give honest, technical feedback.",
-        pricing: "Free",
-    },
-    {
-        name: "Reddit",
-        url: "https://reddit.com",
-        description:
-            "Subreddits like r/SideProject, r/startups, r/SaaS, and r/Entrepreneur each have distinct audiences. Share genuinely, not promotionally.",
-        pricing: "Free",
-    },
-];
-
-const directories: Alternative[] = [
-    {
-        name: "AlternativeTo",
-        url: "https://alternativeto.net",
-        description:
-            "Crowdsourced software recommendations. Users search for tools by comparing them to ones they already know.",
-        pricing: "Free",
-    },
-    {
-        name: "G2",
-        url: "https://g2.com",
-        description:
-            "Enterprise-focused review platform. Millions of B2B buyers use G2 to evaluate software before purchasing.",
-        pricing: "Freemium",
-    },
-    {
-        name: "Capterra",
-        url: "https://capterra.com",
-        description:
-            "Software directory owned by Gartner. Strong SEO presence means your listing gets found organically.",
-        pricing: "Freemium",
-    },
-    {
-        name: "SaaSHub",
-        url: "https://saashub.com",
-        description:
-            "Independent software marketplace with alternatives, reviews, and trending products.",
-        pricing: "Free",
-    },
-    {
-        name: "SaaSworthy",
-        url: "https://saasworthy.com",
-        description:
-            "SaaS discovery platform with awards, ratings, and comparison features.",
-        pricing: "Free",
-    },
-    {
-        name: "StartupStash",
-        url: "https://startupstash.com",
-        description:
-            "Curated directory of resources and tools organized by category. Good for reaching startup founders.",
-        pricing: "Free",
-    },
-    {
-        name: "SourceForge",
-        url: "https://sourceforge.net",
-        description:
-            "One of the oldest and largest software directories. Especially strong for open-source and developer tools.",
-        pricing: "Free",
-    },
-    {
-        name: "Resource.fyi",
-        url: "https://resource.fyi",
-        description:
-            "Curated collection of tools and resources for designers and developers.",
-        pricing: "Free",
-    },
-    {
-        name: "Toolfio",
-        url: "https://toolfio.com",
-        description:
-            "Software directory great for SaaS. Free listing requires adding their badge to your site. Paid option removes the badge requirement.",
-        pricing: "Free/Paid",
-    },
-    {
-        name: "Web Review",
-        url: "https://web-review.com",
-        description:
-            "SEO directory that gives you 3 permanent dofollow backlinks. Helps boost domain authority and visibility on Google, ChatGPT, Claude, and Perplexity.",
-        pricing: "Free/Paid",
-    },
-    {
-        name: "TinyLaunchpad",
-        url: "https://tinylaunchpad.com",
-        description:
-            "Lightweight launch platform for small products, side projects, and experiments.",
-        pricing: "Free",
-    },
-];
-
-const aiDirectories: Alternative[] = [
-    {
-        name: "There's An AI For That",
-        url: "https://theresanaiforthat.com",
-        description:
-            "The largest AI tool directory, updated daily. High traffic from people actively searching for AI solutions.",
-        pricing: "Free",
-    },
-    {
-        name: "Future Tools",
-        url: "https://futuretools.io",
-        description:
-            "Curated and searchable AI tool collection. Strong YouTube and newsletter audience drives extra visibility.",
-        pricing: "Free",
-    },
-];
-
-const otherPlatforms: Alternative[] = [
-    {
-        name: "OpenHunts",
-        url: "https://openhunts.com",
-        description:
-            "Open-source alternative to Product Hunt. Community-driven with transparent ranking.",
-        pricing: "Free/Paid",
-    },
-    {
-        name: "Firsto",
-        url: "https://firsto.co",
-        description:
-            "Minimalist launch platform designed to help you find your very first users.",
-        pricing: "Free",
-    },
-];
-
-const allAlternatives = [
-    ...launchPlatforms,
-    ...communities,
-    ...directories,
-    ...aiDirectories,
-    ...otherPlatforms,
-];
+import {
+    aiDirectories,
+    allAlternatives,
+    communities,
+    directories,
+    launchPlatforms,
+    otherPlatforms,
+    sections,
+} from "@/lib/alternatives";
+import type { Alternative } from "@/lib/alternatives";
 
 const sectionIds = sections.map((s) => s.id);
 const sidebarSections = sections.map(({ id, title }) => ({ id, title }));
@@ -259,24 +37,45 @@ function PricingBadge({ pricing }: { pricing: Alternative["pricing"] }) {
 
 function AlternativesList({ alternatives }: { alternatives: Alternative[] }) {
     return (
-        <ul role="list" className="divide-y divide-slate-100">
+        <ul role="list" className="space-y-4">
             {alternatives.map((alt) => (
                 <li
                     key={alt.name}
-                    className="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-3"
+                    className="grid gap-4 rounded-lg border border-slate-200 bg-white p-3 shadow-sm sm:grid-cols-[160px_1fr] sm:items-start"
                 >
-                    <div className="flex items-baseline gap-2 shrink-0">
-                        <a
-                            href={alt.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-semibold text-blue-600 hover:text-blue-800 underline underline-offset-2"
-                        >
-                            {alt.name}
-                        </a>
-                        <PricingBadge pricing={alt.pricing} />
+                    <a
+                        href={alt.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        tabIndex={-1}
+                        className="block aspect-video overflow-hidden rounded-md border border-slate-100 bg-slate-50"
+                    >
+                        <Image
+                            src={`/screenshots/${alt.id}.webp`}
+                            alt={`Screenshot of ${alt.name}`}
+                            loading="lazy"
+                            width={320}
+                            height={180}
+                            unoptimized
+                            className="h-full w-full object-cover"
+                        />
+                    </a>
+                    <div className="space-y-1">
+                        <div className="flex flex-wrap items-baseline gap-2">
+                            <a
+                                href={alt.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-blue-600 hover:text-blue-800 underline underline-offset-2"
+                            >
+                                {alt.name}
+                            </a>
+                            <PricingBadge pricing={alt.pricing} />
+                        </div>
+                        <p className="text-sm leading-6 text-slate-600">
+                            {alt.description}
+                        </p>
                     </div>
-                    <p className="text-sm text-slate-600">{alt.description}</p>
                 </li>
             ))}
         </ul>

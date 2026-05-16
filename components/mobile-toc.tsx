@@ -25,6 +25,7 @@ export default function MobileToc({
             "Contents"
         );
     }, [activeSectionId, sections]);
+    const isTocOpen = isOpen && hasScrolled;
 
     useEffect(() => {
         const getScrollTop = () =>
@@ -61,7 +62,7 @@ export default function MobileToc({
     }, []);
 
     useEffect(() => {
-        if (!isOpen) return;
+        if (!isTocOpen) return;
         const handleKey = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
                 setIsOpen(false);
@@ -69,13 +70,7 @@ export default function MobileToc({
         };
         window.addEventListener("keydown", handleKey);
         return () => window.removeEventListener("keydown", handleKey);
-    }, [isOpen]);
-
-    useEffect(() => {
-        if (!hasScrolled && isOpen) {
-            setIsOpen(false);
-        }
-    }, [hasScrolled, isOpen]);
+    }, [isTocOpen]);
 
     const handleToggle = () => setIsOpen((prev) => !prev);
     const handleClose = () => setIsOpen(false);
@@ -106,15 +101,17 @@ export default function MobileToc({
                         type="button"
                         onClick={handleToggle}
                         className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm"
-                        aria-expanded={isOpen}
+                        aria-expanded={isTocOpen}
                         aria-controls="mobile-toc-panel"
                     >
-                        {isOpen ? "Close" : "Contents"}
+                        {isTocOpen ? "Close" : "Contents"}
                         <span aria-hidden="true" className="relative h-3 w-4">
                             <span
                                 className={[
                                     "absolute left-0 top-0 h-[2px] w-full rounded bg-slate-600 transition",
-                                    isOpen ? "translate-y-[5px] rotate-45" : "",
+                                    isTocOpen
+                                        ? "translate-y-[5px] rotate-45"
+                                        : "",
                                 ]
                                     .filter(Boolean)
                                     .join(" ")}
@@ -122,7 +119,7 @@ export default function MobileToc({
                             <span
                                 className={[
                                     "absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded bg-slate-600 transition",
-                                    isOpen ? "opacity-0" : "",
+                                    isTocOpen ? "opacity-0" : "",
                                 ]
                                     .filter(Boolean)
                                     .join(" ")}
@@ -130,7 +127,7 @@ export default function MobileToc({
                             <span
                                 className={[
                                     "absolute left-0 bottom-0 h-[2px] w-full rounded bg-slate-600 transition",
-                                    isOpen
+                                    isTocOpen
                                         ? "-translate-y-[5px] -rotate-45"
                                         : "",
                                 ]
@@ -143,10 +140,10 @@ export default function MobileToc({
             </div>
             <div
                 id="mobile-toc-panel"
-                aria-hidden={!isOpen}
+                aria-hidden={!isTocOpen}
                 className={[
                     "overflow-hidden border-b border-slate-200 bg-white/95 backdrop-blur transition-[max-height,opacity] duration-300",
-                    isOpen
+                    isTocOpen
                         ? "max-h-[60vh] opacity-100"
                         : "max-h-0 opacity-0 pointer-events-none",
                 ]
