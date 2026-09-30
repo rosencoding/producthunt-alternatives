@@ -1,0 +1,9 @@
+import HubPage, { hubMetadata } from "@/components/hub-page";
+
+const slug = "ai-tool-directories";
+
+export const metadata = hubMetadata(slug);
+
+export default function Page() {
+    return <HubPage slug={slug} />;
+}

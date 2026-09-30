@@ -79,7 +79,7 @@ export default function MobileToc({
         <nav
             aria-label="Mobile table of contents"
             className={[
-                "fixed left-0 right-0 top-0 z-40 2xl:hidden transition-[transform,opacity] duration-300",
+                "fixed left-0 right-0 top-12 z-30 2xl:hidden transition-[transform,opacity] duration-300",
                 hasScrolled
                     ? "translate-y-0 opacity-100"
                     : "-translate-y-full opacity-0 pointer-events-none",

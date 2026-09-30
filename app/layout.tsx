@@ -1,31 +1,36 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Scripts from "@/components/scripts";
+import { directoryCount } from "@/lib/directories";
+import { DATA_YEAR, SITE_URL } from "@/lib/hubs";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
+const title = `Product Hunt Alternatives: ${directoryCount} Launch Sites (${DATA_YEAR})`;
+const description =
+    `Compare ${directoryCount} Product Hunt alternatives by audience, Domain Rating, and link type. Find your next launch platform or let LaunchDirectories submit for you.`;
 
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+const inter = localFont({
+    src: "./fonts/inter-latin.woff2",
+    variable: "--font-inter",
+    display: "swap",
+    weight: "100 900",
 });
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://producthuntalternatives.com"),
-    title: "Product Hunt Alternatives",
-    description:
-        "A curated list of platforms to launch and promote your product. Discover 30+ alternatives to Product Hunt.",
+    metadataBase: new URL(SITE_URL),
+    title: {
+        default: title,
+        template: "%s | Product Hunt Alternatives",
+    },
+    description,
     alternates: {
         canonical: "/",
+        types: { "text/markdown": "/index.md" },
     },
     openGraph: {
-        title: "Product Hunt Alternatives",
-        description:
-            "A curated list of platforms to launch and promote your product. Discover 30+ alternatives to Product Hunt.",
-        url: "https://producthuntalternatives.com",
+        title,
+        description,
+        url: SITE_URL,
         siteName: "Product Hunt Alternatives",
         images: [
             {
@@ -40,13 +45,17 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Product Hunt Alternatives",
-        description:
-            "A curated list of platforms to launch and promote your product. Discover 30+ alternatives to Product Hunt.",
+        title,
+        description,
         images: ["/og.png"],
     },
     icons: {
-        icon: "/favicon.ico",
+        icon: [
+            { url: "/favicon.ico", sizes: "48x48" },
+            { url: "/favicon.svg", type: "image/svg+xml" },
+            { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+        ],
+        apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
     },
 };
 
@@ -58,7 +67,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${inter.variable} antialiased`}
             >
                 {children}
             </body>

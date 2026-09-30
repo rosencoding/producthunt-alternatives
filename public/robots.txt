@@ -1,4 +1,28 @@
+# Everything here is open to crawlers, including AI crawlers.
+# The rules below are explicit so the intent survives future edits.
+
 User-agent: *
 Allow: /
+
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
+User-agent: CCBot
+User-agent: meta-externalagent
+Allow: /
+
+# Machine-readable mirrors of this site:
+#   /directories.json  the full database as JSON
+#   /llms.txt          index of every page, with field definitions
+#   /llms-full.txt     every page's Markdown in one file
+#   <any page>.md      Markdown mirror of that page
 
 Sitemap: https://producthuntalternatives.com/sitemap.xml
