@@ -59,6 +59,7 @@ export function PricingBadge({
         Free: "bg-green-50 text-green-700",
         "Free/Paid": "bg-amber-50 text-amber-700",
         Freemium: "bg-blue-50 text-blue-700",
+        Paid: "bg-rose-50 text-rose-700",
     };
 
     return (

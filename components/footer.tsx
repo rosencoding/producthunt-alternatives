@@ -124,8 +124,8 @@ export default function Footer() {
                         <p>
                             {directoryCount} directories, {dofollowCount} of
                             them dofollow. Every URL is reachability-checked and
-                            every Domain Rating is measured through DataForSEO
-                            rather than copied from other lists.
+                            every Domain Rating is queried per domain rather
+                            than copied from other lists.
                         </p>
                         <p>
                             Domain Rating and link type reflect what was
@@ -138,7 +138,18 @@ export default function Footer() {
 
                 <p className="footer-legal">
                     Product Hunt Alternatives · {DATA_YEAR} · Not affiliated
-                    with Product Hunt.
+                    with Product Hunt. Domain Rating by{" "}
+                    <a href="https://ahrefs.com" rel="noopener">
+                        Ahrefs
+                    </a>
+                    , used under the{" "}
+                    <a
+                        href="https://ahrefs.com/legal/domain-rating-license"
+                        rel="noopener"
+                    >
+                        Domain Rating License
+                    </a>
+                    .
                 </p>
             </div>
         </footer>

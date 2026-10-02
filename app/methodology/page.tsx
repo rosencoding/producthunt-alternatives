@@ -173,18 +173,29 @@ export default function MethodologyPage() {
 
             <Section id="domain-rating" heading="3. Domain Rating">
                 <P>
-                    Domain Rating is measured through the DataForSEO backlinks
-                    API, which returns a 0&ndash;1000 rank that is divided by 10
-                    to give the 0&ndash;100 figure shown on every page. It is
-                    measured for each domain on this site. It is not copied from
-                    another directory list.
+                    Domain Rating comes from the{" "}
+                    <a
+                        href="https://docs.ahrefs.com/en/api/reference/public/get-domain-rating-free"
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                        rel="noopener"
+                    >
+                        Ahrefs free Domain Rating API
+                    </a>
+                    , on the standard 0&ndash;100 scale. Every domain on this
+                    site is queried individually and the figure is dated, not
+                    carried over from another directory list. Because it is the
+                    same metric most SEO tools quote, the numbers here are
+                    directly comparable with what you already use.
                 </P>
                 <P>
-                    That distinction is not academic. When the measured figures
-                    were compared against the republished ones on the list they
-                    were checked against, the republished numbers ran a median
-                    of <strong>14 points higher</strong>. Stale, inflated DR is
-                    the norm in this niche.
+                    Two limits worth stating plainly. Ahrefs returns DR for the{" "}
+                    <strong>root domain</strong>, so the handful of entries that
+                    live on a subdomain carry their parent domain&rsquo;s figure
+                    and will read higher than the subdomain earns on its own.
+                    And DR describes a link profile, nothing else &mdash; it
+                    says nothing about whether a directory is still moderated,
+                    still accepting submissions, or capable of sending you a
+                    single visitor.
                 </P>
                 <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-slate-200 bg-slate-200 sm:grid-cols-4">
                     {[

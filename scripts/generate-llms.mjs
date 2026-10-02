@@ -255,7 +255,7 @@ await writeFile(
         {
             name: "Product Hunt Alternatives directory database",
             description:
-                "Directories, launch platforms, and communities that accept product submissions. Every URL was reachability-checked; every Domain Rating was measured through DataForSEO rather than copied from other directory lists.",
+                "Directories, launch platforms, and communities that accept product submissions. Every URL was reachability-checked; every Domain Rating comes from the Ahrefs free Domain Rating API, queried per domain rather than copied from other directory lists.",
             url: `${SITE_URL}/directories.json`,
             license: "https://creativecommons.org/licenses/by/4.0/",
             generated,
@@ -266,7 +266,7 @@ await writeFile(
                 name: "Directory name",
                 url: "Directory homepage",
                 domain: "Registrable domain",
-                dr: "Domain Rating 0-100, measured via DataForSEO bulk ranks",
+                dr: "Domain Rating 0-100 by Ahrefs (free Domain Rating API), for the root domain",
                 category: "launchpad | startup | software | ai | community",
                 dofollow: "true, false, or null when the link type has not been verified",
                 pricing: "Free | Free/Paid | Freemium, present only on hand-curated entries",
@@ -287,7 +287,7 @@ await writeFile(
 const llms = [
     "# Product Hunt Alternatives",
     "",
-    `> A verified database of ${details.length} directories, launch platforms, and communities where you can submit a product. Every URL was reachability-checked and every Domain Rating measured through DataForSEO rather than copied from other lists.`,
+    `> A verified database of ${details.length} directories, launch platforms, and communities where you can submit a product. Every URL was reachability-checked and every Domain Rating comes from the Ahrefs free Domain Rating API rather than copied from other lists.`,
     "",
     "Every page below is also available as Markdown at the same path with a `.md` suffix.",
     "",
@@ -298,7 +298,7 @@ const llms = [
     "",
     "## How to read the data",
     "",
-    "- `dr` is Domain Rating on a 0-100 scale, measured through DataForSEO. Higher means a listing is more likely to rank and to pass more authority.",
+    "- `dr` is Domain Rating on a 0-100 scale, by Ahrefs (free Domain Rating API, used under the Domain Rating License: https://ahrefs.com/legal/domain-rating-license). Ahrefs reports DR per root domain, so subdomain entries carry their parent domain's figure. Higher means a listing is more likely to rank and to pass more authority.",
     "- `dofollow: true` means the directory's outbound link passes authority; `false` means it does not; `null` means the link type was not verified. Link type can change without notice.",
     "- `category` is one of launchpad, startup, software, ai, community.",
     `- Data generated ${generated}. Every URL returned a live response at that point; entries that had gone dead were removed rather than left in to pad the count.`,

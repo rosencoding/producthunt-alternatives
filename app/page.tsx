@@ -146,7 +146,7 @@ export default function IndexPage() {
                 </section>
                 <section className="methodology">
                     <h2>About this directory</h2>
-                    <p>The database contains {directoryCount} platforms. Domain Rating is sourced from DataForSEO, and link types reflect the stored checks. Metrics, pricing, and submission rules can change; confirm details with each platform. Curated picks are starting points, not a guarantee of results.</p>
+                    <p>The database contains {directoryCount} platforms. Domain Rating is sourced from the Ahrefs free Domain Rating API, and link types reflect the stored checks. Metrics, pricing, and submission rules can change; confirm details with each platform. Curated picks are starting points, not a guarantee of results.</p>
                 </section>
             </main>
             <Footer />

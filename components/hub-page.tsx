@@ -86,7 +86,7 @@ function hubFaq(hub: Hub) {
         {
             q: `Which has the highest Domain Rating?`,
             a: top
-                ? `${top.name} (${top.domain}) at Domain Rating ${top.dr}. Domain Rating here is measured through DataForSEO on a 0-100 scale rather than copied from other directory lists, which tend to republish stale and inflated figures.`
+                ? `${top.name} (${top.domain}) at Domain Rating ${top.dr}. Domain Rating here comes from the Ahrefs free Domain Rating API on a 0-100 scale, queried per domain and dated, rather than copied undated from other directory lists.`
                 : `No entries are currently listed.`,
         },
         {
@@ -347,11 +347,12 @@ export default function HubPage({ slug }: { slug: string }) {
                 <p className="text-base leading-7 text-zinc-700">
                     Every URL here was requested directly and returned a live
                     response; entries that had gone dead were removed rather
-                    than carried over. Domain Rating is measured through
-                    DataForSEO on a 0&ndash;100 scale, not copied from other
-                    directory lists. Republished DR figures tend to run stale and
-                    high. Link type reflects what the directory used
-                    at the time of checking and can change without notice. The{" "}
+                    than carried over. Domain Rating comes from the Ahrefs free
+                    Domain Rating API on a 0&ndash;100 scale, queried per domain
+                    rather than copied from other directory lists, which tend to
+                    republish figures without dating them. Link type reflects
+                    what the directory used at the time of checking and can
+                    change without notice. The{" "}
                     <Link
                         href="/methodology"
                         className="text-blue-600 underline underline-offset-2 hover:text-blue-800"

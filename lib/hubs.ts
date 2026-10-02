@@ -8,7 +8,7 @@ import {
 export const SITE_URL = "https://producthuntalternatives.com";
 export const DATA_YEAR = 2026;
 /** When the directory data was last collected and re-measured. */
-export const DATA_UPDATED = "2026-09-30";
+export const DATA_UPDATED = "2026-10-02";
 
 export type Hub = {
     slug: string;
@@ -158,7 +158,7 @@ export const hubs: Hub[] = [
             `The full database: ${n} directory submission sites with measured Domain Rating, dofollow status, and verified live URLs.`,
         (n) => [
             `This is the complete database: all ${n} directories, launch platforms, and communities tracked on this site, in one sortable list. Every URL was requested directly and returned a live response; entries that had gone dead were removed rather than left in to pad the count.`,
-            `Domain Rating is measured through DataForSEO rather than copied from another directory list, which matters more than it sounds: republished DR figures across these lists tend to run years stale and materially high. Use the category links to narrow this down to the directories that actually fit your product.`,
+            `Domain Rating comes from the Ahrefs free Domain Rating API, queried per domain and dated, rather than copied from another directory list, which matters more than it sounds: republished DR figures across these lists are rarely dated and tend to run years stale. Use the category links to narrow this down to the directories that actually fit your product.`,
         ],
     ),
 ];

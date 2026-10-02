@@ -1,8 +1,10 @@
 import type { DirectoryCategory } from "./directory-categories";
 export { categoryMeta, type DirectoryCategory } from "./directory-categories";
-// Directory database. Domain Rating (`dr`) comes from DataForSEO bulk ranks
-// (0-1000 scale, divided by 10) and every URL was reachability-checked before
-// being included. `dofollow: null` means the link type has not been verified.
+// Directory database. Domain Rating (`dr`) comes from the Ahrefs free Domain
+// Rating API (0-100 scale, one call per root domain) and every URL was
+// reachability-checked before being included. Ahrefs returns DR for the root
+// domain, so the handful of subdomain entries carry their parent domain's
+// figure. `dofollow: null` means the link type has not been verified.
 // Rows live in directories.json so build scripts can read the same source.
 import rows from "./directories.json";
 
@@ -15,7 +17,7 @@ export type Directory = {
     dr: number;
     category: DirectoryCategory;
     dofollow: boolean | null;
-    pricing?: "Free" | "Free/Paid" | "Freemium";
+    pricing?: "Free" | "Free/Paid" | "Freemium" | "Paid";
     description?: string;
     curated?: boolean;
 };
