@@ -41,8 +41,15 @@ export function findDirectory(id: string): Directory | undefined {
     return directories.find((d) => d.id === id);
 }
 
-// Every directory has its own page.
-export const detailDirectories: Directory[] = directories;
+// Only hand-reviewed entries have their own editorial page. The remaining
+// entries stay in the searchable database and category tables.
+export const detailDirectories: Directory[] = directories.filter(
+    (directory) => directory.curated,
+);
+
+export function directoryPageHref(d: Directory): string {
+    return d.curated ? `/directory/${d.id}` : d.url;
+}
 
 /** Closest peers to `d`: same category first, ranked by DR proximity. */
 export function similarDirectories(d: Directory, limit = 10): Directory[] {

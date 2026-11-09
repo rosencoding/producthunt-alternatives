@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import Favicon from "@/components/favicon";
-import type { Directory } from "@/lib/directories";
+import { directoryPageHref, type Directory } from "@/lib/directories";
 import { categoryMeta } from "@/lib/directory-categories";
 
 /**
  * Every filtered row is rendered; PAGE_SIZE only controls how many are visible.
- * All 505 links therefore sit in the HTML for crawlers regardless of this value.
+ * Uncurated rows link to their source site instead of a generated profile page.
  */
 const PAGE_SIZE = 24;
 
@@ -43,13 +43,13 @@ export default function DirectoryExplorer({ items }: { items: Directory[] }) {
                     <Favicon directory={item} size={24} />
                     <div className="directory-row-body">
                         <div className="directory-row-heading">
-                            <h3><Link href={`/directory/${item.id}`}>{item.name}</Link></h3>
+                            <h3>{item.curated ? <Link href={directoryPageHref(item)}>{item.name}</Link> : <a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}</a>}</h3>
                             <span className="metric-badge">DR {item.dr}</span>
                             <span className="directory-meta">{categoryMeta[item.category].label} · {item.dofollow === null ? "Link unverified" : item.dofollow ? "Dofollow" : "Nofollow"}</span>
                         </div>
                         <p className="directory-description">{item.description || `Explore ${item.name}, a ${categoryMeta[item.category].labelLower}, and check its listing details before submitting your product.`}</p>
                     </div>
-                    <Link className="directory-details" href={`/directory/${item.id}`}>Details <span aria-hidden="true">→</span></Link>
+                    {item.curated ? <Link className="directory-details" href={directoryPageHref(item)}>Details <span aria-hidden="true">→</span></Link> : <a className="directory-details" href={item.url} target="_blank" rel="noopener noreferrer">Visit site <span aria-hidden="true">↗</span></a>}
                 </li>)}
             </ul>
             {results.length === 0 && <div className="empty-results"><h3>No platforms match these filters.</h3><p>Try a broader search or explore another category.</p><button className="button-secondary mt-4" onClick={reset}>Reset filters</button></div>}

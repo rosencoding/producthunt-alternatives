@@ -1,7 +1,12 @@
 import Link from "next/link";
 import { DrBadge, LinkTypeBadge } from "@/components/badges";
 import Favicon from "@/components/favicon";
-import { categoryMeta, displayName, type Directory } from "@/lib/directories";
+import {
+    categoryMeta,
+    directoryPageHref,
+    displayName,
+    type Directory,
+} from "@/lib/directories";
 
 export default function DirectoryTable({
     items,
@@ -42,12 +47,23 @@ export default function DirectoryTable({
                                 <div className="dir-cell">
                                     <Favicon directory={d} />
                                     <span>
-                                        <Link
-                                            href={`/directory/${d.id}`}
-                                            className="dir-name"
-                                        >
-                                            {displayName(d)}
-                                        </Link>
+                                        {d.curated ? (
+                                            <Link
+                                                href={directoryPageHref(d)}
+                                                className="dir-name"
+                                            >
+                                                {displayName(d)}
+                                            </Link>
+                                        ) : (
+                                            <a
+                                                href={d.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="dir-name"
+                                            >
+                                                {displayName(d)}
+                                            </a>
+                                        )}
                                         <span className="dir-domain">
                                             {d.domain}
                                         </span>

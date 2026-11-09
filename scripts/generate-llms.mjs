@@ -239,10 +239,29 @@ const details = pages
     .filter((p) => p.route.startsWith("/directory/"))
     .sort((a, b) => a.route.localeCompare(b.route));
 
-// A single machine-readable file beats making an agent crawl 505 HTML pages.
+// One machine-readable file exposes the full database without a thin profile
+// page for every record.
 const rows = JSON.parse(
     await readFile(path.join(process.cwd(), "lib", "directories.json"), "utf8"),
 );
+const categoryRoutes = {
+    launchpad: "launch-platforms",
+    startup: "startup-directories",
+    software: "saas-directories",
+    ai: "ai-tool-directories",
+    community: "startup-communities",
+};
+const redirects = rows
+    .filter((row) => !row.curated)
+    .flatMap((row) => {
+        const category = categoryRoutes[row.category];
+        return [
+            `/directory/${row.id} /${category} 301`,
+            `/directory/${row.id}/ /${category} 301`,
+            `/directory/${row.id}.md /${category}.md 301`,
+        ];
+    });
+await writeFile(path.join(outDir, "_redirects"), `${redirects.join("\n")}\n`);
 const generated = new Date().toISOString().slice(0, 10);
 const categoryCounts = rows.reduce((acc, r) => {
     acc[r.category] = (acc[r.category] ?? 0) + 1;
@@ -262,21 +281,25 @@ await writeFile(
             count: rows.length,
             categories: categoryCounts,
             fields: {
-                id: "URL slug; the page is /directory/<id> and its Markdown is /directory/<id>.md",
+                id: "Stable record slug; individually reviewed records have a /directory/<id> profile page",
                 name: "Directory name",
                 url: "Directory homepage",
                 domain: "Registrable domain",
                 dr: "Domain Rating 0-100 by Ahrefs (free Domain Rating API), for the root domain",
                 category: "launchpad | startup | software | ai | community",
                 dofollow: "true, false, or null when the link type has not been verified",
-                pricing: "Free | Free/Paid | Freemium, present only on hand-curated entries",
+                pricing: "Free | Free/Paid | Freemium | Paid; present only where pricing has been recorded",
                 description: "Hand-written blurb, present only on curated entries",
                 curated: "true when the entry was reviewed by hand",
             },
             directories: rows.map((r) => ({
                 ...r,
-                page: `${SITE_URL}/directory/${r.id}`,
-                markdown: `${SITE_URL}/directory/${r.id}.md`,
+                page: r.curated
+                    ? `${SITE_URL}/directory/${r.id}`
+                    : `${SITE_URL}/${categoryRoutes[r.category]}`,
+                markdown: r.curated
+                    ? `${SITE_URL}/directory/${r.id}.md`
+                    : `${SITE_URL}/${categoryRoutes[r.category]}.md`,
             })),
         },
         null,
@@ -287,21 +310,21 @@ await writeFile(
 const llms = [
     "# Product Hunt Alternatives",
     "",
-    `> A verified database of ${details.length} directories, launch platforms, and communities where you can submit a product. Every URL was reachability-checked and every Domain Rating comes from the Ahrefs free Domain Rating API rather than copied from other lists.`,
+    `> A database of ${rows.length} directory and launch platform records where you can submit a product. ${details.length} hand-reviewed records have individual editorial profiles; the remaining records are available in the relevant category list. Every URL was reachability-checked and every Domain Rating comes from the Ahrefs free Domain Rating API rather than copied from other lists.`,
     "",
     "Every page below is also available as Markdown at the same path with a `.md` suffix.",
     "",
     "## Machine-readable data",
     "",
-    `- [directories.json](${SITE_URL}/directories.json): the whole database as JSON — ${details.length} entries with id, name, url, domain, Domain Rating, category, dofollow status, and the page/Markdown URL for each. Fetch this instead of crawling ${details.length} pages.`,
+    `- [directories.json](${SITE_URL}/directories.json): the whole database as JSON — ${rows.length} entries with id, name, url, domain, Domain Rating, category, dofollow status, and the corresponding editorial or category page. Fetch this instead of crawling the database.`,
     `- [llms-full.txt](${SITE_URL}/llms-full.txt): every page's Markdown concatenated into one file.`,
     "",
     "## How to read the data",
     "",
-    "- `dr` is Domain Rating on a 0-100 scale, by Ahrefs (free Domain Rating API, used under the Domain Rating License: https://ahrefs.com/legal/domain-rating-license). Ahrefs reports DR per root domain, so subdomain entries carry their parent domain's figure. Higher means a listing is more likely to rank and to pass more authority.",
+    "- `dr` is Domain Rating on a 0-100 scale, by Ahrefs (free Domain Rating API, used under the Domain Rating License: https://ahrefs.com/legal/domain-rating-license). Ahrefs reports DR per root domain, so subdomain entries carry their parent domain's figure. It is a link metric, not a measure of traffic, relevance, or acceptance likelihood.",
     "- `dofollow: true` means the directory's outbound link passes authority; `false` means it does not; `null` means the link type was not verified. Link type can change without notice.",
     "- `category` is one of launchpad, startup, software, ai, community.",
-    `- Data generated ${generated}. Every URL returned a live response at that point; entries that had gone dead were removed rather than left in to pad the count.`,
+    `- Data generated ${generated}. Every listed site returned a live response at that point; entries that had gone dead were removed rather than left in to pad the count.`,
     "",
     "## Start here",
     "",

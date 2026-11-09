@@ -5,7 +5,7 @@ import SiteHeader from "@/components/site-header";
 import Footer from "@/components/footer";
 import DirectoryExplorer from "@/components/directory-explorer";
 import Favicon from "@/components/favicon";
-import { directories, directoryCount, dofollowCount, findDirectory } from "@/lib/directories";
+import { directories, directoryCount, directoryPageHref, dofollowCount, findDirectory } from "@/lib/directories";
 import { allAlternatives } from "@/lib/alternatives";
 import { DATA_YEAR, SITE_URL, hubs } from "@/lib/hubs";
 import { submissionUrl } from "@/lib/submission";
@@ -44,7 +44,7 @@ export default function IndexPage() {
     const schema = { "@context": "https://schema.org", "@graph": [
         { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: "Product Hunt Alternatives", url: SITE_URL },
         { "@type": "CollectionPage", "@id": `${SITE_URL}/#webpage`, name: `Product Hunt Alternatives: ${directoryCount} Places to Launch`, url: SITE_URL, isPartOf: { "@id": `${SITE_URL}/#website` }, mainEntity: { "@id": `${SITE_URL}/#alternatives` } },
-        { "@type": "ItemList", "@id": `${SITE_URL}/#alternatives`, name: "Product Hunt alternatives to compare", numberOfItems: comparisons.length, itemListElement: comparisons.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: findDirectory(item.id)?.name, url: `${SITE_URL}/directory/${item.id}` })) },
+        { "@type": "ItemList", "@id": `${SITE_URL}/#alternatives`, name: "Product Hunt alternatives to compare", numberOfItems: comparisons.length, itemListElement: comparisons.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: findDirectory(item.id)?.name, url: `${SITE_URL}${directoryPageHref(findDirectory(item.id)!)}` })) },
         { "@type": "FAQPage", mainEntity: faqs.map(({ question, answer }) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })) },
     ] };
     return (
@@ -104,9 +104,9 @@ export default function IndexPage() {
                             <tbody>{comparisons.map((item) => {
                                 const directory = findDirectory(item.id);
                                 return directory && <tr key={item.id}>
-                                    <th scope="row"><Link href={`/directory/${item.id}`} className="flex items-center gap-3"><Favicon directory={directory} size={20} />{directory.name}</Link></th>
+                                    <th scope="row">{directory.curated ? <Link href={directoryPageHref(directory)} className="flex items-center gap-3"><Favicon directory={directory} size={20} />{directory.name}</Link> : <a href={directory.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3"><Favicon directory={directory} size={20} />{directory.name}</a>}</th>
                                     <td>{item.audience}</td><td>{item.approach}</td>
-                                    <td><Link href={`/directory/${item.id}`} aria-label={`View ${directory.name} details`}>View ↗</Link></td>
+                                    <td>{directory.curated ? <Link href={directoryPageHref(directory)} aria-label={`View ${directory.name} details`}>Details →</Link> : <a href={directory.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${directory.name}`}>Visit ↗</a>}</td>
                                 </tr>;
                             })}</tbody>
                         </table>

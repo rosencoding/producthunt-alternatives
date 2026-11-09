@@ -78,6 +78,28 @@ function hubFaq(hub: Hub) {
     const top = hub.items[0];
     const label = hub.h1.replace(/^\d+\s+/, "").toLowerCase();
 
+    if (hub.slug === "ai-tool-directories") {
+        const unverifiedPricing = hub.items.length - hub.items.filter((d) => d.pricing).length;
+        return [
+            {
+                q: "Are these AI directories free to submit to?",
+                a: `Pricing is recorded for ${free} of ${hub.items.length} listings, and both are marked free. Pricing for the other ${unverifiedPricing} has not been verified, so check each site's current submission terms.`,
+            },
+            {
+                q: "Which AI directories have editorial notes?",
+                a: "There's An AI For That and Future Tools have hand-reviewed profile notes on this site. The remaining entries appear in the dataset without an editorial profile; inclusion does not confirm that submissions are currently open.",
+            },
+            {
+                q: "Are the listed links dofollow?",
+                a: `The dataset records ${dofollow} dofollow and ${hub.items.length - dofollow} nofollow links as checked. Link attributes and submission policies can change, so verify them on the destination before submitting.`,
+            },
+            {
+                q: "Does a high Domain Rating mean more traffic or acceptance?",
+                a: "No. Domain Rating is a third-party link metric. It does not measure visits, relevance to your product, listing quality, or the chance that a submission will be accepted.",
+            },
+        ];
+    }
+
     return [
         {
             q: `How many ${label} are there?`,
@@ -209,6 +231,9 @@ export default function HubPage({ slug }: { slug: string }) {
     const hub = findHub(slug)!;
     const dofollow = hub.items.filter((d) => d.dofollow === true).length;
     const topDr = hub.items[0]?.dr ?? 0;
+    const isAiHub = slug === "ai-tool-directories";
+    const curatedAiItems = isAiHub ? hub.items.filter((d) => d.curated) : [];
+    const pricedCount = hub.items.filter((d) => d.pricing).length;
 
     return (
         <PageShell
@@ -259,6 +284,38 @@ export default function HubPage({ slug }: { slug: string }) {
                 ))}
             </section>
 
+            {isAiHub && (
+                <section className="space-y-4" aria-labelledby="editor-picks">
+                    <div>
+                        <h2 id="editor-picks" className="font-serif text-2xl font-semibold tracking-tight text-black">
+                            AI directories with reviewed profiles
+                        </h2>
+                        <p className="mt-2 text-base leading-7 text-zinc-700">
+                            These {curatedAiItems.length} entries have hand-reviewed notes and profile pages. Both are marked free in our dataset; confirm current terms on each site.
+                        </p>
+                    </div>
+                    <ul className="grid gap-4 sm:grid-cols-2">
+                        {curatedAiItems.map((item) => (
+                            <li key={item.id} className="rounded-lg border border-slate-200 p-4">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <Link href={`/directory/${item.id}`} className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:text-blue-700">
+                                        {item.name}
+                                    </Link>
+                                    <span className="font-mono text-xs text-slate-500">DR {item.dr}</span>
+                                    <span className="rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">{item.pricing ?? "Price unverified"}</span>
+                                    <span className="rounded-full bg-slate-50 px-2 py-0.5 text-xs text-slate-600">{item.dofollow ? "Dofollow" : item.dofollow === false ? "Nofollow" : "Link unverified"}</span>
+                                </div>
+                                {item.description && <p className="mt-3 text-sm leading-6 text-zinc-700">{item.description}</p>}
+                                <a href={item.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm text-blue-700 underline underline-offset-2">Visit {item.domain}</a>
+                            </li>
+                        ))}
+                    </ul>
+                    <p className="text-sm leading-6 text-slate-500">
+                        Across the full list, {dofollow} links are recorded as dofollow and {hub.items.length - dofollow} as nofollow. Pricing is present for {pricedCount} of {hub.items.length} entries; missing pricing means unverified, not necessarily paid or free. Domain Rating does not indicate traffic or acceptance likelihood.
+                    </p>
+                </section>
+            )}
+
             <section className="space-y-4">
                 <h2 className="font-serif text-2xl font-semibold tracking-tight text-black">
                     All {hub.items.length}, ranked by Domain Rating
@@ -268,14 +325,12 @@ export default function HubPage({ slug }: { slug: string }) {
 
             <section className="space-y-4">
                 <h2 className="font-serif text-2xl font-semibold tracking-tight text-black">
-                    What order to submit in
+                    {isAiHub ? "Compare listings by Domain Rating" : "What order to submit in"}
                 </h2>
                 <p className="text-base leading-7 text-zinc-700">
-                    Submitting alphabetically wastes the approval window. The
-                    high-authority directories take the longest to review, so
-                    they should go out first. These bands are computed from the
-                    measured Domain Ratings of the {hub.items.length} entries on
-                    this page.
+                    {isAiHub
+                        ? "Use Domain Rating as one comparison point, not as a proxy for audience, review time, or acceptance. Prioritize directories that fit your product and check their current submission requirements."
+                        : `These bands are computed from the measured Domain Ratings of the ${hub.items.length} entries on this page. Review times and referral traffic vary by site.`}
                 </p>
                 <ol className="space-y-4">
                     {submissionTiers(hub).map((tier) => (
@@ -301,19 +356,32 @@ export default function HubPage({ slug }: { slug: string }) {
                                 </span>
                             </div>
                             <p className="mt-2 text-base leading-7 text-zinc-700">
-                                {tier.advice}
+                            {isAiHub
+                                ? "Use this DR range to compare sites, then assess product fit and current submission terms directly. The data does not establish review speed or traffic."
+                                : tier.advice}
                             </p>
                             <p className="mt-2 text-sm text-slate-500">
                                 Top of this band:{" "}
                                 {tier.items.slice(0, 4).map((d, i) => (
                                     <span key={d.id}>
                                         {i > 0 && ", "}
-                                        <Link
-                                            href={`/directory/${d.id}`}
-                                            className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
-                                        >
-                                            {d.name}
-                                        </Link>
+                                        {d.curated ? (
+                                            <Link
+                                                href={`/directory/${d.id}`}
+                                                className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                                            >
+                                                {d.name}
+                                            </Link>
+                                        ) : (
+                                            <a
+                                                href={d.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                                            >
+                                                {d.name}
+                                            </a>
+                                        )}
                                     </span>
                                 ))}
                             </p>

@@ -148,9 +148,9 @@ export default function MethodologyPage() {
                 <P>
                     {curatedCount} entries are hand-picked and hand-written.
                     Those carry a description written for this site, a pricing
-                    note, and a screenshot. The rest are listed with measured
-                    data only, which is why their pages lead with facts rather
-                    than opinion.
+                    note, and a screenshot. The rest remain in the category
+                    tables and machine-readable database with measured data,
+                    but do not have individual profile pages.
                 </P>
             </Section>
 

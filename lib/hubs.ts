@@ -73,10 +73,10 @@ export const hubs: Hub[] = [
         (n) => `${n} AI Tool Directories to Submit Your AI Product`,
         (n) => `${n} AI Tool Directories to Submit Your AI Tool (${DATA_YEAR})`,
         (n) =>
-            `${n} AI tool directories, each checked for uptime and ranked by Domain Rating. See which accept free submissions and which give dofollow links.`,
+            `${n} places to submit an AI product, with live-checked URLs and measured Domain Rating. Compare verified link types and the two listings with confirmed free pricing.`,
         (n) => [
-            `AI directories are the fastest-moving corner of product discovery, and also the noisiest. Dozens launch every month, and plenty are dead within a year. Every one of the ${n} directories below returned a live response when this list was last verified, and each carries a Domain Rating measured directly rather than copied from another list.`,
-            `Submit to the high-DR entries first: they are the ones people actually browse, and the ones whose links carry weight. Directories marked dofollow pass link equity to your site; nofollow listings still bring referral traffic and brand mentions that AI assistants pick up when they answer questions about tools like yours.`,
+            `This page lists websites where you can submit or list an AI product. It is not a catalog for people looking to browse AI apps. All ${n} destinations returned a live response at the last check, and their Domain Ratings were measured directly rather than copied from another list.`,
+            `The current dataset records 79 dofollow and 48 nofollow outbound links. Pricing is confirmed for two listings, both marked free; pricing for the other 125 has not been verified. Check each site's current submission rules before spending time or money. Domain Rating is a link metric, not a measure of traffic, audience fit, or acceptance odds.`,
         ],
         "ai",
     ),

@@ -84,7 +84,8 @@ export default function Footer() {
                         id="footer-popular"
                         heading="Popular directories"
                         links={popular.map((d) => ({
-                            href: `/directory/${d.id}`,
+                            href: d.curated ? `/directory/${d.id}` : d.url,
+                            external: !d.curated,
                             label: `${d.name} · DR ${d.dr}`,
                         }))}
                     />

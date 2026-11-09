@@ -22,6 +22,8 @@ import { DATA_YEAR, DATA_UPDATED, SITE_URL, hubForCategory } from "@/lib/hubs";
 
 type Params = { id: string };
 
+export const dynamicParams = false;
+
 export function generateStaticParams(): Params[] {
     return detailDirectories.map((d) => ({ id: d.id }));
 }
@@ -157,7 +159,7 @@ export default async function DirectoryPage({
                     "@type": "ListItem",
                     position: i + 1,
                     name: o.name,
-                    url: `${SITE_URL}/directory/${o.id}`,
+                    url: o.curated ? `${SITE_URL}/directory/${o.id}` : o.url,
                 })),
             },
         ],
