@@ -283,6 +283,18 @@ export default function MethodologyPage() {
                     Uptime was checked at a point in time; sites go dark between
                     updates.
                 </P>
+                <P>
+                    The same checking applies to the services that sell
+                    submission as a package: the{" "}
+                    <Link
+                        href="/directory-submission-services"
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                    >
+                        comparison of directory submission services
+                    </Link>{" "}
+                    records where each price was read from and flags the
+                    entries that could not be verified at source.
+                </P>
             </Section>
 
             <Section id="machine-readable" heading="7. Using the data">

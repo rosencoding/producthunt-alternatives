@@ -437,8 +437,16 @@ export default function HubPage({ slug }: { slug: string }) {
                     >
                         {directoryCount} directory submission sites
                     </Link>
-                    , {dofollowCount} of them dofollow. If you are starting from
-                    scratch, the{" "}
+                    , {dofollowCount} of them dofollow. If you would rather pay
+                    someone to fill the forms, the{" "}
+                    <Link
+                        href="/directory-submission-services"
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                    >
+                        comparison of directory submission services
+                    </Link>{" "}
+                    puts every published price side by side. If you are starting
+                    from scratch, the{" "}
                     <Link
                         href="/"
                         className="text-blue-600 underline underline-offset-2 hover:text-blue-800"

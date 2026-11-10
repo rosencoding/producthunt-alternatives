@@ -14,6 +14,7 @@ const links = [
     ["/startup-directories", "Startups"],
     ["/startup-communities", "Communities"],
     ["/backlink-directories", "Dofollow links"],
+    ["/directory-submission-services", "Submission services"],
 ];
 
 export default function SiteHeader({ current }: { current?: string }) {
@@ -27,6 +28,7 @@ export default function SiteHeader({ current }: { current?: string }) {
                 <nav aria-label="Primary" className="hidden items-center gap-6 text-xs lg:flex">
                     <Link href="/directory-submission-sites" aria-current={current === "directory-submission-sites" ? "page" : undefined}>Explore directories</Link>
                     <Link href="/launch-platforms" aria-current={current === "launch-platforms" ? "page" : undefined}>Launch platforms</Link>
+                    <Link href="/directory-submission-services" aria-current={pathname === "/directory-submission-services" ? "page" : undefined}>Submission services</Link>
                     <Link href="/#launch-guide">Launch guide</Link>
                 </nav>
                 <div className="flex items-center gap-2">

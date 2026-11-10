@@ -118,7 +118,7 @@ export default function IndexPage() {
                     <p className="section-intro">Use launch platforms for an introduction, directories for ongoing discovery, and communities for feedback. Each channel serves a different purpose.</p>
                     <ol className="guide-steps">
                         <li><h3>1. Find your audience</h3><p>Start with a few relevant platforms. Compare audience, category, submission requirements, and link type. A high DR alone does not tell you whether a directory will send customers.</p></li>
-                        <li><h3>2. Prepare your submission</h3><p>Have your tagline, product description, logo, screenshots, pricing, and website ready. Adapt the copy to each platform’s audience and requirements.</p></li>
+                        <li><h3>2. Prepare your submission</h3><p>Have your tagline, product description, logo, screenshots, pricing, and website ready. Adapt the copy to each platform’s audience and requirements. If you would rather not fill the forms yourself, <Link href="/directory-submission-services">compare the directory submission services</Link> before you pay anyone.</p></li>
                         <li><h3>3. Launch and learn</h3><p>Space out your launches, reply to feedback, and track referral visits and signups. Focus on the channels that bring relevant users.</p></li>
                     </ol>
                 </section>

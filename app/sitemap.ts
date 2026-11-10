@@ -15,6 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 1,
         },
         {
+            url: `${SITE_URL}/directory-submission-services`,
+            lastModified: now,
+            changeFrequency: "monthly" as const,
+            priority: 0.9,
+        },
+        {
             url: `${SITE_URL}/methodology`,
             lastModified: now,
             changeFrequency: "monthly" as const,

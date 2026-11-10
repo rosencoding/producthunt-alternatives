@@ -102,6 +102,10 @@ export default function Footer() {
                                 label: `Dofollow only (${dofollowCount})`,
                             },
                             {
+                                href: "/directory-submission-services",
+                                label: "Submission services compared",
+                            },
+                            {
                                 href: "/methodology",
                                 label: "How the data is collected",
                             },
