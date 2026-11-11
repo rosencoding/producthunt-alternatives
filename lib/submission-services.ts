@@ -567,3 +567,51 @@ export function criteriaScore(service: SubmissionService): number {
 export const bestCriteriaScore = Math.max(
     ...submissionServices.map(criteriaScore),
 );
+
+/**
+ * Buying a listing outright is a different product from paying someone to
+ * fill in forms, so it is not ranked with the services above. It belongs on
+ * the page because it is the cheaper answer for a reader who wants a few
+ * dofollow links rather than a hundred submissions.
+ *
+ * Domain Ratings here are this site's own measured figures, not the vendor's.
+ * Toolfio publishes 63 / 59 / 59 / 29 for the four we track; we measure
+ * 62 / 56 / 56 / 28, which is ordinary drift rather than inflation.
+ */
+export const directListing = {
+    name: "Toolfio",
+    domain: "toolfio.com",
+    url: "https://toolfio.com/submit",
+    /** Run by the same people as this site. */
+    ours: true,
+    tiers: [
+        {
+            name: "Free",
+            price: "$0",
+            detail: "Requires DR 20+ and a permanent “Featured on” badge on your site, and sits in a review queue.",
+        },
+        {
+            name: "Premium",
+            price: "$18.99",
+            detail: "One listing on Toolfio with 3 dofollow links, published straight after payment, no badge and no queue.",
+        },
+        {
+            name: "Review article",
+            price: "$39.99",
+            detail: "Premium plus a roughly 10,000-character review published on the Toolfio blog.",
+        },
+        {
+            name: "Bundle",
+            price: "$49.99",
+            detail: "Premium listings across all five directories, 15 dofollow links in total.",
+        },
+    ],
+    /** DR measured by this site, newest pass. */
+    network: [
+        { name: "Toolfio", domain: "toolfio.com", dr: 62 },
+        { name: "DodoDirectory", domain: "dododirectory.com", dr: 56 },
+        { name: "SaaSBison", domain: "saasbison.com", dr: 56 },
+        { name: "Web Review", domain: "webreview.io", dr: null },
+        { name: "Alternative.tools", domain: "alternative.tools", dr: 28 },
+    ],
+};

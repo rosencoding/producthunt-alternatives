@@ -14,6 +14,7 @@ import {
     unreachableCount,
     CHECKED,
     CRITERION_WEIGHTS,
+    directListing,
     criteriaScore,
     type CriterionScore,
     type SubmissionService,
@@ -206,12 +207,13 @@ const VERDICT = [
         why: "A live screenshot sheet you watch fill up from day one, instead of a report that arrives at the end.",
     },
     {
-        label: "Fastest",
+        label: "Cheapest route",
         icon: "bolt" as const,
-        name: "SubmitSaaS",
-        id: "submitsaas",
-        price: "$100",
-        why: "100+ listings inside 48 hours. Automated with a human review step, so acceptance depends on a process you cannot see.",
+        name: "Toolfio",
+        id: "direct-listing",
+        price: "$18.99",
+        why: "Three dofollow links on a DR 62 directory, bought outright and live in minutes. A listing you purchase, not a hundred forms filled.",
+        ours: true,
     },
     {
         label: "Free",
@@ -427,6 +429,7 @@ const TOC = [
     { id: "which", label: "Which one fits" },
     { id: "per-listing", label: "Cost per listing" },
     { id: "not-included", label: "What the price excludes" },
+    { id: "direct-listing", label: "Buy a listing directly" },
     { id: "ai-answers", label: "AI answers" },
     { id: "before-you-buy", label: "Before you pay" },
     { id: "red-flags", label: "Red flags" },
@@ -534,90 +537,102 @@ export default function SubmissionServicesPage() {
                 </p>
             </header>
 
-            <section aria-labelledby="verdict-heading">
-                <Card className="border-t-[3px] border-t-[var(--brand)]">
-                    <h2
-                        id="verdict-heading"
-                        className="border-b border-slate-100 bg-slate-50/70 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500"
-                    >
-                        The short answer
-                    </h2>
-                    <dl className="divide-y divide-slate-100">
-                        {VERDICT.map((v) => (
-                            <div
-                                key={v.id}
-                                className="gap-x-5 px-5 py-4 sm:flex sm:items-start"
-                            >
-                                <dt className="flex shrink-0 items-center gap-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:w-44">
-                                    <span
-                                        className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-                                            v.ours
-                                                ? "bg-[var(--brand-soft)] text-[var(--brand)]"
-                                                : "bg-slate-100 text-slate-500"
-                                        }`}
-                                    >
-                                        <VerdictIcon name={v.icon} />
-                                    </span>
-                                    {v.label}
-                                </dt>
-                                <dd className="min-w-0 sm:flex-1">
-                                    <p className="flex flex-wrap items-baseline gap-x-2">
-                                        <a
-                                            href={`#${v.id}`}
-                                            className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:text-blue-700"
-                                        >
-                                            {v.name}
-                                        </a>
-                                        <span className="font-mono text-sm font-semibold tabular-nums text-slate-900">
-                                            {v.price}
-                                        </span>
-                                    </p>
-                                    <p className="mt-1 max-w-[62ch] text-sm leading-6 text-zinc-700">
-                                        {v.why}
-                                    </p>
-                                    {v.ours && (
-                                        <a
-                                            href={submissionUrl(
-                                                "services_verdict",
-                                            )}
-                                            target="_blank"
-                                            rel="noopener"
-                                            className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-[var(--brand)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--brand-hover)]"
-                                        >
-                                            See packages &amp; pricing
-                                            <span aria-hidden="true">
-                                                &rarr;
-                                            </span>
-                                        </a>
-                                    )}
-                                </dd>
-                            </div>
-                        ))}
-                    </dl>
-                </Card>
-            </section>
+            <section aria-labelledby="verdict-heading" className="space-y-3">
+                <h2
+                    id="verdict-heading"
+                    className="text-xs font-semibold uppercase tracking-wider text-slate-500"
+                >
+                    The short answer
+                </h2>
 
-                <dl className="flex flex-wrap gap-x-10 gap-y-4 border-y border-slate-200 py-4">
-                    {[
-                        { t: "Compared", v: String(serviceCount) },
-                        { t: "Fully manual", v: String(manualCount) },
-                        {
-                            t: "Price range",
-                            v: `$${cheapestPaid}–$${PRICE_CEILING}`,
-                        },
-                        { t: "Per listing", v: "$1–$4" },
-                    ].map((s) => (
-                        <div key={s.t}>
-                            <dt className="text-xs uppercase tracking-wider text-slate-500">
-                                {s.t}
-                            </dt>
-                            <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-slate-900">
-                                {s.v}
-                            </dd>
+                {VERDICT.slice(0, 1).map((v) => (
+                    <div
+                        key={v.id}
+                        className="rounded-xl border border-[var(--brand-border)] border-t-[3px] border-t-[var(--brand)] bg-[var(--brand-soft)] p-5"
+                    >
+                        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--brand)]">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--brand)] text-white">
+                                <VerdictIcon name={v.icon} />
+                            </span>
+                            {v.label}
+                        </p>
+                        <p className="mt-3 flex flex-wrap items-baseline gap-x-3">
+                            <a
+                                href={`#${v.id}`}
+                                className="font-serif text-2xl font-semibold tracking-tight text-black underline decoration-slate-300 underline-offset-4 hover:text-[var(--brand)]"
+                            >
+                                {v.name}
+                            </a>
+                            <span className="font-mono text-base font-semibold tabular-nums text-slate-900">
+                                {v.price}
+                            </span>
+                        </p>
+                        <p className="mt-2 max-w-[62ch] text-base leading-7 text-zinc-700">
+                            {v.why}
+                        </p>
+                        <a
+                            href={submissionUrl("services_verdict")}
+                            target="_blank"
+                            rel="noopener"
+                            className="mt-4 inline-flex items-center gap-1.5 rounded-md bg-[var(--brand)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--brand-hover)]"
+                        >
+                            See packages &amp; pricing
+                            <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </div>
+                ))}
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                    {VERDICT.slice(1).map((v) => (
+                        <div
+                            key={v.id}
+                            className="rounded-xl border border-slate-200 bg-white p-4"
+                        >
+                            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                                    <VerdictIcon name={v.icon} />
+                                </span>
+                                {v.label}
+                            </p>
+                            <p className="mt-2.5 flex flex-wrap items-baseline gap-x-2">
+                                <a
+                                    href={`#${v.id}`}
+                                    className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:text-blue-700"
+                                >
+                                    {v.name}
+                                </a>
+                                <span className="font-mono text-sm font-semibold tabular-nums text-slate-900">
+                                    {v.price}
+                                </span>
+                            </p>
+                            <p className="mt-1.5 text-sm leading-6 text-zinc-700">
+                                {v.why}
+                            </p>
                         </div>
                     ))}
-                </dl>
+                </div>
+            </section>
 
+            <dl className="flex flex-wrap gap-x-10 gap-y-4 border-y border-slate-200 py-4">
+                {[
+                    { t: "Compared", v: String(serviceCount) },
+                    { t: "Fully manual", v: String(manualCount) },
+                    {
+                        t: "Price range",
+                        v: `$${cheapestPaid}–$${PRICE_CEILING}`,
+                    },
+                    { t: "Per listing", v: "$1–$4" },
+                ].map((s) => (
+                    <div key={s.t}>
+                        <dt className="text-xs uppercase tracking-wider text-slate-500">
+                            {s.t}
+                        </dt>
+                        <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-slate-900">
+                            {s.v}
+                        </dd>
+                    </div>
+                ))}
+            </dl>
 
             <nav aria-label="On this page">
                 <ul
@@ -1271,6 +1286,121 @@ export default function SubmissionServicesPage() {
                             </div>
                         ))}
                 </dl>
+            </Section>
+
+            <Section
+                id="direct-listing"
+                heading="Buying a listing directly instead"
+            >
+                <P>
+                    Every service above sells the same thing: somebody filling
+                    in forms on directories that belong to other people. There
+                    is a cheaper answer if what you actually want is a few
+                    dofollow links rather than a hundred submissions &mdash;
+                    buy the listing outright from a directory that sells them.
+                </P>
+                <P>
+                    <strong className="text-slate-900">
+                        {directListing.name} is run by the same people as this
+                        site
+                    </strong>
+                    , so weigh that the same way as the ranking above. It sells
+                    listings on its own five directories rather than submitting
+                    you anywhere, which is why it is not ranked with the
+                    services: it is a different product at a different price,
+                    and comparing $18.99 with $99 would be comparing a listing
+                    with a week of someone&rsquo;s work.
+                </P>
+                <div className="grid gap-5 sm:grid-cols-2">
+                    <TableCard>
+                        <table className="w-full border-collapse text-left text-sm">
+                            <caption className="sr-only">
+                                {directListing.name} tiers
+                            </caption>
+                            <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                                <tr>
+                                    <TH>Tier</TH>
+                                    <TH>Price</TH>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {directListing.tiers.map((t) => (
+                                    <tr key={t.name} className="align-top">
+                                        <td className="px-3 py-2.5">
+                                            <span className="font-medium text-slate-900">
+                                                {t.name}
+                                            </span>
+                                            <span className="mt-0.5 block text-xs leading-5 text-slate-500">
+                                                {t.detail}
+                                            </span>
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-2.5 font-mono font-semibold tabular-nums text-slate-900">
+                                            {t.price}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </TableCard>
+                    <TableCard>
+                        <table className="w-full border-collapse text-left text-sm">
+                            <caption className="sr-only">
+                                The five directories in the bundle
+                            </caption>
+                            <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                                <tr>
+                                    <TH>Directory</TH>
+                                    <TH align="center">DR</TH>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {directListing.network.map((d) => (
+                                    <tr key={d.domain}>
+                                        <td className="px-3 py-2.5">
+                                            <span className="font-medium text-slate-900">
+                                                {d.name}
+                                            </span>
+                                            <span className="mt-0.5 block text-xs text-slate-500">
+                                                {d.domain}
+                                            </span>
+                                        </td>
+                                        <td className="px-3 py-2.5 text-center font-mono tabular-nums text-slate-900">
+                                            {d.dr ?? "—"}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </TableCard>
+                </div>
+                <P>
+                    Those Domain Ratings are this site&rsquo;s own measurements,
+                    not the vendor&rsquo;s. {directListing.name} publishes 63,
+                    59, 59 and 29 for the four we track and we measure 62, 56,
+                    56 and 28 &mdash; ordinary drift rather than inflation,
+                    which is more than several of the ranked services manage.
+                    Web Review is not in our dataset, so we have no figure for
+                    it and are not repeating theirs.
+                </P>
+                <P>
+                    The trade is straightforward. Five listings for $49.99 is a
+                    fraction of what the submission services charge, and they
+                    go live in minutes rather than weeks. What you do not get
+                    is reach: five directories is five directories, where $99
+                    buys thirty or more. Buy listings directly if you want a
+                    few good links cheaply and immediately; buy a submission
+                    service if you want coverage across a market you have not
+                    got time to work through.
+                </P>
+                <a
+                    href={`${directListing.url}?utm_source=producthuntalternatives&utm_medium=referral&utm_campaign=services_roundup`}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-50"
+                >
+                    See {directListing.name} listing prices
+                    <span aria-hidden="true">&rarr;</span>
+                </a>
             </Section>
 
             <Section
