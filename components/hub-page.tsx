@@ -282,6 +282,17 @@ export default function HubPage({ slug }: { slug: string }) {
                         {p}
                     </p>
                 ))}
+                <p className="text-base leading-7 text-zinc-700">
+                    Submitting to these by hand takes 20 to 40 hours. If you
+                    would rather buy the hours back,{" "}
+                    <Link
+                        href="/directory-submission-services"
+                        className="text-blue-600 underline underline-offset-2 hover:text-blue-800"
+                    >
+                        we compared 12 directory submission services
+                    </Link>{" "}
+                    on price, turnaround and whether a human fills the forms.
+                </p>
             </section>
 
             {isAiHub && (

@@ -532,26 +532,6 @@ export default function SubmissionServicesPage() {
                     Every price below was read from the vendor&rsquo;s own page
                     on <time dateTime={CHECKED}>{CHECKED}</time>.
                 </p>
-                <dl className="flex flex-wrap gap-x-10 gap-y-4 border-y border-slate-200 py-4">
-                    {[
-                        { t: "Compared", v: String(serviceCount) },
-                        { t: "Fully manual", v: String(manualCount) },
-                        {
-                            t: "Price range",
-                            v: `$${cheapestPaid}–$${PRICE_CEILING}`,
-                        },
-                        { t: "Per listing", v: "$1–$4" },
-                    ].map((s) => (
-                        <div key={s.t}>
-                            <dt className="text-xs uppercase tracking-wider text-slate-500">
-                                {s.t}
-                            </dt>
-                            <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-slate-900">
-                                {s.v}
-                            </dd>
-                        </div>
-                    ))}
-                </dl>
             </header>
 
             <section aria-labelledby="verdict-heading">
@@ -616,6 +596,28 @@ export default function SubmissionServicesPage() {
                     </dl>
                 </Card>
             </section>
+
+                <dl className="flex flex-wrap gap-x-10 gap-y-4 border-y border-slate-200 py-4">
+                    {[
+                        { t: "Compared", v: String(serviceCount) },
+                        { t: "Fully manual", v: String(manualCount) },
+                        {
+                            t: "Price range",
+                            v: `$${cheapestPaid}–$${PRICE_CEILING}`,
+                        },
+                        { t: "Per listing", v: "$1–$4" },
+                    ].map((s) => (
+                        <div key={s.t}>
+                            <dt className="text-xs uppercase tracking-wider text-slate-500">
+                                {s.t}
+                            </dt>
+                            <dd className="mt-0.5 font-mono text-lg font-semibold tabular-nums text-slate-900">
+                                {s.v}
+                            </dd>
+                        </div>
+                    ))}
+                </dl>
+
 
             <nav aria-label="On this page">
                 <ul
@@ -807,33 +809,25 @@ export default function SubmissionServicesPage() {
                             </li>
                         ))}
                     </ul>
-                    <p className="mt-3 text-sm leading-6 text-zinc-700">
-                        The score is not the ranking, and where they disagree
-                        the entry says so. GetMoreBacklinks scores{" "}
+<p className="mt-3 text-sm leading-6 text-zinc-700">
+                        The score measures only what a vendor publishes; the
+                        ranking also weighs whether those figures could be
+                        confirmed at source and how long the run takes, which
+                        is why GetMoreBacklinks scores{" "}
                         {criteriaScore(
                             submissionServices.find(
                                 (x) => x.id === "getmorebacklinks",
                             )!,
                         )}{" "}
-                        and still ranks eighth, because the score measures what
-                        a vendor publishes and the ranking also weighs whether
-                        those figures could be confirmed at source and how long
-                        the run takes. Both numbers are on the page so you can
-                        disagree with the second one.
+                        and still ranks eighth.
                     </p>
                 </div>
                 <P>
                     Three clear all five: LaunchDirectories, List My Site, and
-                    doing it yourself. Between the two paid ones,
-                    LaunchDirectories leads on two differences the matrix cannot
-                    show &mdash; 4&ndash;6 business days against about ten, and
-                    three standing tiers against a single $169 package. List My
-                    Site answers with the best proof format here, a live
-                    screenshot sheet you watch fill up, and with a banner offer
-                    of 60 submissions for $99 that was running when this page
-                    was checked. If that banner is still up when you read this
-                    and you are not in a hurry, it is the cheaper way to get
-                    hands on the forms.
+                    doing it yourself. LaunchDirectories takes the top spot on
+                    two things the matrix cannot show &mdash; 4&ndash;6
+                    business days against about ten, and three standing tiers
+                    against a single $169 package.
                 </P>
             </Section>
 
@@ -1411,18 +1405,27 @@ export default function SubmissionServicesPage() {
             </Section>
 
             <Section id="faq" heading="Common questions">
-                <dl className="max-w-[72ch] space-y-5">
-                        {FAQ.map((item) => (
-                            <div key={item.q}>
-                                <dt className="text-base font-semibold text-slate-900">
-                                    {item.q}
-                                </dt>
-                                <dd className="mt-1.5 text-base leading-7 text-zinc-700">
-                                    {item.a}
-                                </dd>
-                            </div>
-                        ))}
-                </dl>
+                <div className="max-w-[72ch]">
+                    {FAQ.map((item) => (
+                        <details
+                            key={item.q}
+                            className="group border-b border-slate-200"
+                        >
+                            <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-3.5 text-base font-semibold text-slate-900 marker:content-none [&::-webkit-details-marker]:hidden">
+                                {item.q}
+                                <span
+                                    aria-hidden="true"
+                                    className="shrink-0 text-lg font-normal text-slate-400 transition-transform group-open:rotate-45"
+                                >
+                                    +
+                                </span>
+                            </summary>
+                            <p className="pb-4 text-base leading-7 text-zinc-700">
+                                {item.a}
+                            </p>
+                        </details>
+                    ))}
+                </div>
             </Section>
 
             <Section id="maintenance" heading="How this comparison is maintained">
