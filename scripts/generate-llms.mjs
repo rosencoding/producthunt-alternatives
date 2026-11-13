@@ -1,6 +1,7 @@
 // Postbuild: emit a Markdown mirror of every page plus llms.txt, so AI agents
 // can read and navigate the site without parsing the rendered HTML.
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import TurndownService from "turndown";
 
@@ -251,17 +252,53 @@ const categoryRoutes = {
     ai: "ai-tool-directories",
     community: "startup-communities",
 };
-const redirects = rows
-    .filter((row) => !row.curated)
-    .flatMap((row) => {
-        const category = categoryRoutes[row.category];
-        return [
-            `/directory/${row.id} /${category} 301`,
-            `/directory/${row.id}/ /${category} 301`,
-            `/directory/${row.id}.md /${category}.md 301`,
-        ];
-    });
+const retired = rows.filter((row) => !row.curated);
+
+// Cloudflare Pages reads this one; Vercel ignores it. Both hosts are kept
+// working because the deploy target has moved between them before.
+const redirects = retired.flatMap((row) => {
+    const category = categoryRoutes[row.category];
+    return [
+        `/directory/${row.id} /${category} 301`,
+        `/directory/${row.id}/ /${category} 301`,
+        `/directory/${row.id}.md /${category}.md 301`,
+    ];
+});
 await writeFile(path.join(outDir, "_redirects"), `${redirects.join("\n")}\n`);
+
+// Vercel reads vercel.json from the repo root before the build runs, so this
+// file has to be committed rather than produced into out/. Every id is a
+// [a-z0-9-] slug, which makes it safe to drop straight into a route pattern.
+// One alternation per category keeps this at 15 rules instead of 1443 and
+// clear of Vercel's 1024-redirect ceiling.
+const retiredByCategory = retired.reduce((acc, row) => {
+    (acc[row.category] ??= []).push(row.id);
+    return acc;
+}, {});
+const vercelRedirects = Object.entries(retiredByCategory).flatMap(
+    ([category, ids]) => {
+        const route = categoryRoutes[category];
+        const group = ids.join("|");
+        const dotMd = ids.map((id) => `${id}\\.md`).join("|");
+        return [
+            { source: `/directory/:slug(${group})`, destination: `/${route}` },
+            { source: `/directory/:slug(${group})/`, destination: `/${route}` },
+            {
+                source: `/directory/:slug(${dotMd})`,
+                destination: `/${route}.md`,
+            },
+        ].map((rule) => ({ ...rule, permanent: true }));
+    },
+);
+const vercelConfigPath = path.join(process.cwd(), "vercel.json");
+const vercelConfig = existsSync(vercelConfigPath)
+    ? JSON.parse(await readFile(vercelConfigPath, "utf8"))
+    : {};
+vercelConfig.redirects = vercelRedirects;
+await writeFile(
+    vercelConfigPath,
+    `${JSON.stringify(vercelConfig, null, 4)}\n`,
+);
 const generated = new Date().toISOString().slice(0, 10);
 const categoryCounts = rows.reduce((acc, r) => {
     acc[r.category] = (acc[r.category] ?? 0) + 1;

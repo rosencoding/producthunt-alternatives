@@ -10,7 +10,8 @@
         "start": "next start",
         "lint": "eslint",
         "postbuild": "node scripts/generate-llms.mjs",
-        "favicons": "node scripts/fetch-favicons.mjs"
+        "favicons": "node scripts/fetch-favicons.mjs",
+        "indexnow": "node scripts/indexnow.mjs"
     },
     "dependencies": {
         "@fontsource-variable/lora": "^5.2.8",
