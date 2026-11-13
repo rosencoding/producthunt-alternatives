@@ -268,9 +268,30 @@ await writeFile(path.join(outDir, "_redirects"), `${redirects.join("\n")}\n`);
 
 // Vercel reads vercel.json from the repo root before the build runs, so this
 // file has to be committed rather than produced into out/. Every id is a
-// [a-z0-9-] slug, which makes it safe to drop straight into a route pattern.
-// One alternation per category keeps this at 15 rules instead of 1443 and
-// clear of Vercel's 1024-redirect ceiling.
+// [a-z0-9-] slug, which makes it safe to drop straight into a route pattern,
+// so the ids are matched as one alternation instead of one rule each.
+//
+// Two separate ceilings have to be respected. Vercel caps a source pattern's
+// length, so the ids are packed into chunks well under that; and it caps the
+// route list at 1024, which the chunking stays far clear of (~30 rules for
+// 481 ids). A single alternation per category blew the length cap and failed
+// the deploy, so keep MAX_SOURCE conservative.
+const MAX_SOURCE = 900;
+const chunkByLength = (parts) => {
+    const chunks = [[]];
+    let length = 0;
+    for (const part of parts) {
+        // +1 for the "|" that will join it to the previous part.
+        if (length + part.length + 1 > MAX_SOURCE && chunks.at(-1).length > 0) {
+            chunks.push([]);
+            length = 0;
+        }
+        chunks.at(-1).push(part);
+        length += part.length + 1;
+    }
+    return chunks;
+};
+
 const retiredByCategory = retired.reduce((acc, row) => {
     (acc[row.category] ??= []).push(row.id);
     return acc;
@@ -278,16 +299,23 @@ const retiredByCategory = retired.reduce((acc, row) => {
 const vercelRedirects = Object.entries(retiredByCategory).flatMap(
     ([category, ids]) => {
         const route = categoryRoutes[category];
-        const group = ids.join("|");
-        const dotMd = ids.map((id) => `${id}\\.md`).join("|");
-        return [
-            { source: `/directory/:slug(${group})`, destination: `/${route}` },
-            { source: `/directory/:slug(${group})/`, destination: `/${route}` },
-            {
-                source: `/directory/:slug(${dotMd})`,
+        const pages = chunkByLength(ids).flatMap((chunk) => {
+            const group = chunk.join("|");
+            return [
+                `/directory/:slug(${group})`,
+                `/directory/:slug(${group})/`,
+            ].map((source) => ({ source, destination: `/${route}` }));
+        });
+        const mirrors = chunkByLength(ids.map((id) => `${id}\\.md`)).map(
+            (chunk) => ({
+                source: `/directory/:slug(${chunk.join("|")})`,
                 destination: `/${route}.md`,
-            },
-        ].map((rule) => ({ ...rule, permanent: true }));
+            }),
+        );
+        return [...pages, ...mirrors].map((rule) => ({
+            ...rule,
+            permanent: true,
+        }));
     },
 );
 const vercelConfigPath = path.join(process.cwd(), "vercel.json");
